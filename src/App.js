@@ -25,10 +25,11 @@ function App() {
         />
         <i
           onClick={(e) => {
-            setToDos([
-              ...toDos,
-              { title: toDo, id: Date.now(), status: false },
-            ]);
+            toDo !== "" &&
+              setToDos([
+                ...toDos,
+                { title: toDo, id: Date.now(), status: false },
+              ]);
             setToDo("");
           }}
           className="fas fa-plus"
@@ -37,19 +38,33 @@ function App() {
       <div>
         <h2>Tasks</h2>
       </div>
-      {toDos.map((todoObj) => {
+      {toDos.map((todoObj, index) => {
         if (!todoObj.status) {
-          return <ToDo todoObj={todoObj} toDos={toDos} setToDos={setToDos} />;
+          return (
+            <ToDo
+              key={index}
+              todoObj={todoObj}
+              toDos={toDos}
+              setToDos={setToDos}
+            />
+          );
         }
         return null;
       })}
 
       <div>
         <h2>Completed</h2>
-        {toDos.map((todoObj) => {
+        {toDos.map((todoObj, index) => {
           if (todoObj.status) {
             console.log("hi");
-            return <ToDo todoObj={todoObj} toDos={toDos} setToDos={setToDos} />;
+            return (
+              <ToDo
+                key={index}
+                todoObj={todoObj}
+                toDos={toDos}
+                setToDos={setToDos}
+              />
+            );
           }
           return null;
         })}

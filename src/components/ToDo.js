@@ -1,8 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import ReactConfirmAlert from "react-confirm-alert";
 
 function ToDo({ todoObj, toDos, setToDos }) {
+  const [showConfirm, setShowConfirm] = useState(false);
+  const handleConfirm = (e) => {
+    
+    setToDos(
+      toDos.filter((obj) => {
+        if (obj.id !== todoObj.id) {
+          return obj;
+        }
+        return null;
+      })
+    );
+
+    setShowConfirm(false)
+  };
   return (
     <div className="todos">
+      {showConfirm && (
+        <ReactConfirmAlert
+          title="Confirm Delete"
+          message="Are you sure you want to delete this record?"
+          buttons={[
+            {
+              label: "Yes",
+              onClick: handleConfirm
+            },
+            {
+              label: "No",
+              onClick: () => setShowConfirm(!showConfirm),
+            },
+          ]}
+        />
+      )}
+
       <div className="todo">
         <div className="left">
           <input
@@ -24,7 +56,10 @@ function ToDo({ todoObj, toDos, setToDos }) {
           <p>{todoObj.title}</p>
         </div>
         <div className="right">
-          <i className="fas fa-times"></i>
+          <i
+            onClick={(e) => setShowConfirm(true)}
+            className="fas fa-times"
+          ></i>
         </div>
       </div>
     </div>
