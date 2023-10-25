@@ -1,5 +1,6 @@
 import "./App.css";
 import { useState } from "react";
+import ToDo from "./components/ToDo";
 
 function App() {
   const [toDos, setToDos] = useState([]);
@@ -33,21 +34,26 @@ function App() {
           className="fas fa-plus"
         ></i>
       </div>
+      <div>
+        <h2>Tasks</h2>
+      </div>
       {toDos.map((todoObj) => {
-        return (
-          <div className="todos">
-            <div className="todo">
-              <div className="left">
-                <input type="checkbox" name="" id="" />
-                <p>{todoObj.title}</p>
-              </div>
-              <div className="right">
-                <i className="fas fa-times"></i>
-              </div>
-            </div>
-          </div>
-        );
+        if (!todoObj.status) {
+          return <ToDo todoObj={todoObj} toDos={toDos} setToDos={setToDos} />;
+        }
+        return null;
       })}
+
+      <div>
+        <h2>Completed</h2>
+        {toDos.map((todoObj) => {
+          if (todoObj.status) {
+            console.log("hi");
+            return <ToDo todoObj={todoObj} toDos={toDos} setToDos={setToDos} />;
+          }
+          return null;
+        })}
+      </div>
     </div>
   );
 }
