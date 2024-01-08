@@ -1,7 +1,8 @@
-import "./App.css";
 import { useState } from "react";
+import {daysOfWeek} from'./config/constants'
 import ToDo from "./components/ToDo";
 import Modal from "./components/Modal";
+import "./App.css";
 
 function App() {
   const [toDos, setToDos] = useState([]);
@@ -18,7 +19,7 @@ function App() {
         </div>
         <div className="subHeading">
           <br />
-          <h2>Whoop, it's Wednesday 🌝 ☕ </h2>
+          <h2>Whoop, it's {daysOfWeek[new Date().getDay()]} 🌝 ☕ </h2>
         </div>
         <div className="input">
           <input
@@ -41,9 +42,7 @@ function App() {
             className="fas fa-plus"
           ></i>
         </div>
-        <div>
           {!!toDos.length && toDos.find((obj) => !obj.status) && <h2>Tasks</h2>}
-        </div>
         <div className="todos">
           {toDos.map((todoObj, index) => {
             if (!todoObj.status) {
@@ -61,7 +60,6 @@ function App() {
             return null;
           })}
         </div>
-        <div>
           {toDos.find((obj) => obj.status) && <h2>Completed</h2>}
           <div className="todos">
             {toDos.map((todoObj, index) => {
@@ -80,7 +78,6 @@ function App() {
               return null;
             })}
           </div>
-        </div>
       </div>
       <div>
         {showConfirm.show && (
