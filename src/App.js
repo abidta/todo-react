@@ -1,75 +1,98 @@
 import "./App.css";
 import { useState } from "react";
 import ToDo from "./components/ToDo";
+import Modal from "./components/Modal";
 
 function App() {
   const [toDos, setToDos] = useState([]);
   const [toDo, setToDo] = useState("");
+  const [showConfirm, setShowConfirm] = useState({
+    show: false,
+    id: undefined,
+  });
   return (
-    <div className="app">
-      <div className="mainHeading">
-        <h1>ToDo List</h1>
-      </div>
-      <div className="subHeading">
-        <br />
-        <h2>Whoop, it's Wednesday 🌝 ☕ </h2>
-      </div>
-      <div className="input">
-        <input
-          value={toDo}
-          onChange={(e) => {
-            setToDo(e.target.value);
-          }}
-          type="text"
-          placeholder="🖊️ Add item..."
-        />
-        <i
-          onClick={(e) => {
-            toDo !== "" &&
-              setToDos([
-                ...toDos,
-                { title: toDo, id: Date.now(), status: false },
-              ]);
-            setToDo("");
-          }}
-          className="fas fa-plus"
-        ></i>
+    <>
+      <div className="app">
+        <div className="mainHeading">
+          <h1>ToDo List</h1>
+        </div>
+        <div className="subHeading">
+          <br />
+          <h2>Whoop, it's Wednesday 🌝 ☕ </h2>
+        </div>
+        <div className="input">
+          <input
+            value={toDo}
+            onChange={(e) => {
+              setToDo(e.target.value);
+            }}
+            type="text"
+            placeholder="🖊️ Add item..."
+          />
+          <i
+            onClick={(e) => {
+              toDo !== "" &&
+                setToDos([
+                  ...toDos,
+                  { title: toDo, id: Date.now(), status: false },
+                ]);
+              setToDo("");
+            }}
+            className="fas fa-plus"
+          ></i>
+        </div>
+        <div>
+          {!!toDos.length && toDos.find((obj) => !obj.status) && <h2>Tasks</h2>}
+        </div>
+        <div className="todos">
+          {toDos.map((todoObj, index) => {
+            if (!todoObj.status) {
+              return (
+                <ToDo
+                  key={index}
+                  todoObj={todoObj}
+                  toDos={toDos}
+                  setToDos={setToDos}
+                  setShowConfirm={setShowConfirm}
+                  showConfirm={showConfirm}
+                />
+              );
+            }
+            return null;
+          })}
+        </div>
+        <div>
+          {toDos.find((obj) => obj.status) && <h2>Completed</h2>}
+          <div className="todos">
+            {toDos.map((todoObj, index) => {
+              if (todoObj.status) {
+                return (
+                  <ToDo
+                    key={index}
+                    todoObj={todoObj}
+                    toDos={toDos}
+                    setToDos={setToDos}
+                    setShowConfirm={setShowConfirm}
+                    showConfirm={showConfirm}
+                  />
+                );
+              }
+              return null;
+            })}
+          </div>
+        </div>
       </div>
       <div>
-        <h2>Tasks</h2>
+        {showConfirm.show && (
+          <Modal
+            setShowConfirm={setShowConfirm}
+            showConfirm={showConfirm}
+            toDos={toDos}
+            setToDos={setToDos}
+          />
+        )}
       </div>
-      {toDos.map((todoObj, index) => {
-        if (!todoObj.status) {
-          return (
-            <ToDo
-              key={index}
-              todoObj={todoObj}
-              toDos={toDos}
-              setToDos={setToDos}
-            />
-          );
-        }
-        return null;
-      })}
-
-      <div>
-        <h2>Completed</h2>
-        {toDos.map((todoObj, index) => {
-          if (todoObj.status) {
-            console.log("hi");
-            return (
-              <ToDo
-                key={index}
-                todoObj={todoObj}
-                toDos={toDos}
-                setToDos={setToDos}
-              />
-            );
-          }
-          return null;
-        })}
-      </div>
-    </div>
+    </>
   );
 }
 
